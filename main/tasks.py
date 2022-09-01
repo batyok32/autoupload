@@ -4,6 +4,8 @@ import subprocess
 from .models import Queue
 
 # from celery.signals import task_prerun, task_success
+direcory = "gdrive:mail"
+directory_path = "/home/batyr/Загрузки/"
 
 
 @shared_task
@@ -11,9 +13,7 @@ def upload_file(path):
     """
     Task to upload to remote backend
     """
-    direcory = "gdrive:mail"
-    directory_path = "/home/batyr/Загрузки/"
-    full_path = directory_path + path
+    full_path = os.path.join(directory_path, path)
     some_command = f"rclone copy {full_path} {direcory}"
     q = Queue.objects.create(path=full_path, status="Uploading")
     print("Created queue")

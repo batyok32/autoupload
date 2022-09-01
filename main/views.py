@@ -5,10 +5,10 @@ import os
 
 from .tasks import upload_file
 
+directory = "/home/batyr/Загрузки/"
 
 # Create your views here.
 def index(request):
-    directory = "/home/batyr/Загрузки/"
     file_list = os.listdir(directory)
     result_list = []
     for f in file_list:
