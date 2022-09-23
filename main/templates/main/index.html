@@ -1,58 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-            crossorigin="anonymous"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
-        />
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"
-        ></script>
-    </head>
-    <body>
-        <div class="container">
-            <h1 class="text-center my-5">
-                Directory in <br />
-                <small class="text-primary">{{ directory }}</small>
-            </h1>
-            {% for file in files %}
-            <div
-                class="row border px-3 py-2 my-2 align-items-center"
-                style="border-radius: 10px"
+{% extends 'main/base.html' %} {% block main %}
+<div class="container">
+    <h1 class="text-center my-5">
+        Directory in <br />
+        <small class="text-primary">{{ directory }}</small>
+    </h1>
+    <a href="/queues/">Queues</a>
+    <a href="/remotes/list/">List remote</a>
+    <div class="mb-3">
+        <div class="d-flex justify-content-center">
+            <label for="remotestorage" class="form-label text-muted"
+                >Удаленное хранилище</label
             >
-                <div class="col-auto">
-                    {% if file.ext == "folder" %}
-                    <i class="bi bi-folder-fill text-primary"></i>
-                    {% elif file.ext == "png" or file.ext == "jpg" or file.ext == "webp" %}
-                    <i class="bi bi-image text-success"></i>
-                    {% elif file.ext == "txt" %}
-                    <i class="bi bi-file-earmark-text"></i>
-                    {% else %}
-                    <i class="bi bi-file-earmark"></i>
-                    {% endif %}
-                </div>
-                <div class="col">{{file.name}}</div>
-                <div class="col-auto">
-                    <a href="/upload/{{ file.name }}/">
-                        <button class="btn btn-success border">
-                            <i class="bi bi-cloud-arrow-up h5"></i>
-                        </button>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
         </div>
-    </body>
-</html>
+        <input
+            type="text"
+            value="gdrive"
+            class="form-control"
+            id="remotestorage"
+            aria-describedby="remotestorage"
+        />
+    </div>
+    {% for file in files %}
+    <div
+        class="row border px-3 py-2 my-2 align-items-center"
+        style="border-radius: 10px"
+    >
+        <div class="col-auto">
+            {% if file.ext == "folder" %}
+            <i class="bi bi-folder-fill text-primary"></i>
+            {% elif file.ext == "png" or file.ext == "jpg" %}
+            <i class="bi bi-image text-success"></i>
+            {% elif file.ext == "txt" %}
+            <i class="bi bi-file-earmark-text"></i>
+            {% else %}
+            <i class="bi bi-file-earmark"></i>
+            {% endif %}
+        </div>
+        <div class="col">{{file.name}}</div>
+        <div class="col-auto">
+            <!-- href="/upload/{{ file.name }}/" -->
+            <a href="#" onclick="uploadme(file_path='{{ file.name }}')">
+                <button class="btn btn-success border">
+                    <i class="bi bi-cloud-arrow-up h5"></i>
+                </button>
+            </a>
+            <a href="/delete/{{ file.name }}/">
+                <button class="btn btn-danger border">
+                    <i class="bi bi-trash h5"></i>
+                </button>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    function uploadme(file_path) {
+        remote = document.getElementById("remotestorage").value;
+        link = `/upload/${remote}/${file_path}/`;
+        window.location.href = link;
+    }
+</script>
+{% endblock main %}

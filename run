@@ -1,0 +1,3 @@
+python manage.py runserver
+redis-server
+celery -A config worker -l INFO
